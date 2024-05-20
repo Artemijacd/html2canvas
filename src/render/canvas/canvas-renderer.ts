@@ -446,6 +446,10 @@ export class CanvasRenderer extends Renderer {
                 }
             } else if (paint.listValue && container.styles.listStyleType !== LIST_STYLE_TYPE.NONE) {
                 const [fontFamily] = this.createFontStyle(styles);
+                let leftOffset = container.bounds.left;
+                if (container.styles.direction === DIRECTION.RTL) {
+                    leftOffset = container.bounds.left + container.bounds.width + 15;
+                }
 
                 this.ctx.font = fontFamily;
                 this.ctx.fillStyle = asString(styles.color);
@@ -453,7 +457,7 @@ export class CanvasRenderer extends Renderer {
                 this.ctx.textBaseline = 'middle';
                 this.ctx.textAlign = 'right';
                 const bounds = new Bounds(
-                    container.bounds.left,
+                    leftOffset,
                     container.bounds.top + getAbsoluteValue(container.styles.paddingTop, container.bounds.width),
                     container.bounds.width,
                     computeLineHeight(styles.lineHeight, styles.fontSize.number) / 2 + 1
